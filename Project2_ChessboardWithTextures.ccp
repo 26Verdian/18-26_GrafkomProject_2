@@ -5,7 +5,6 @@
 #include <GL/freeglut.h>
 #include "getBMP.h"
 
-
 int gridSizex = 8; // ukuran panjang grid papan catur
 int gridSizey = 4; // ukuran lebar grid papan catur
 float board = -0.5;
