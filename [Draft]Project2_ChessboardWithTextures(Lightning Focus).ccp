@@ -5,6 +5,7 @@
 #include <GL/freeglut.h>
 #include "getBMP.h"
 
+
 int gridSizex = 8;
 int gridSizey = 4;
 float board = -0.5;
