@@ -19,16 +19,6 @@ int prevMouseY = 0;
 bool isRotating = false; // tracking pergerakan mouse
 int animationDuration = 1000;
 
-GLfloat light_position[] = { 5.0, 5.0, 5.0, 1.0 };
-GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
-GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-
-GLfloat material_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
-GLfloat material_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat material_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat material_shininess = 100.0;
-
 //menggambar kotak catur hitam dan putih
 void drawChessboard1() {
 
