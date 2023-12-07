@@ -19,7 +19,7 @@ int prevMouseY = 0;
 bool isRotating = false; // tracking pergerakan mouse
 int animationDuration = 1000;
 
-//menggambar kotak catur hitam dan putih
+//menggambar kotak catur hitam dan putih yang pertama
 void drawChessboard1() {
 
     //loop untuk menggambar kotak hitam dan putih
@@ -42,6 +42,7 @@ void drawChessboard1() {
     }
 }
 
+//menggambar kotak catur hitam dan putih yang kedua
 void drawChessboard2() {
     glTranslatef(chessx, chessy, chessz);
 
@@ -65,23 +66,25 @@ void drawChessboard2() {
     }
 }
 
+//Fungsi untuk membuka box
 void openBox(int value) {
     if (box < 5.0) {
-        box += 0.05; // Increment the board position
-        glutPostRedisplay(); // Trigger redrawing
-        glutTimerFunc(animationDuration / 100, openBox, 0); // Set the timer for the next update
+        box += 0.05;
+        glutPostRedisplay();
+        glutTimerFunc(animationDuration / 100, openBox, 0);
     }
 }
 
+//Fungsi untuk menutup box
 void closeBox(int value) {
     if (box > -0.5) {
-        box -= 0.05; // Decrement the board position
-        glutPostRedisplay(); // Trigger redrawing
-        glutTimerFunc(animationDuration / 100, closeBox, 0); // Set the timer for the next update
+        box -= 0.05;
+        glutPostRedisplay();
+        glutTimerFunc(animationDuration / 100, closeBox, 0);
     }
 }
 
-//menggambar papan kayu catur
+//menggambar papan kayu catur pertama
 void drawWoodenBoard1() {
     glColor3f(0.6, 0.4, 0.2); // warna cokelat
 
@@ -92,6 +95,7 @@ void drawWoodenBoard1() {
     glPopMatrix();
 }
 
+//menggambar papan kayu catur kedua
 void drawWoodenBoard2() {
     glColor3f(0.6, 0.4, 0.2); // warna cokelat
 
@@ -104,34 +108,34 @@ void drawWoodenBoard2() {
 
 GLuint textures;
 
-// Load external textures.
+// Fungsi Load Texture
 void loadTextures()
 {
-    // Local storage for image data.
+    // Storage untuk image file
     imageFile* image[1];
 
-    // Load the image.
+    // meng-Load Image
     image[0] = getBMP("../../Textures/Chess.bmp");
 
-    // Create texture object texture[0]. 
+    // Membuat texture object texture[0]. 
     glBindTexture(GL_TEXTURE_2D, textures);
 
-    // Specify image data for currently active texture object.
+    // Menspesifikasikan image data untuk texture objek yang aktif.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image[0]->width, image[0]->height, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, image[0]->data);
 
-    // Set texture parameters for wrapping.
+    // Meng-Set texture parameters untuk wrapping.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    // Set texture parameters for filtering.
+    // Meng-Set texture parameters untuk filtering.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 
 void drawBox() {
-    // Load the texture only once (you can call this in the initialization part of your program)
+    // Meng-Load texture
     static bool textureLoaded = false;
     if (!textureLoaded) {
         loadTextures();
@@ -142,8 +146,8 @@ void drawBox() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textures);
 
-    // Draw the box with texture coordinates
-    glColor3f(1.0, 1.0, 1.0); // Set color to white for the textured cube
+    // Mulai menggambar Box yang akan dibuat
+    glColor3f(1.0, 1.0, 1.0); // warna putih
 
     glPushMatrix();
     glTranslatef(-0.5, -0.3, box);
@@ -194,27 +198,6 @@ void drawBox() {
     glDisable(GL_TEXTURE_2D);
 }
 
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-
-    gluLookAt(5.0, 5.0, 15.0,
-        0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0);
-
-    // mengaplikasikan rotasi mouse
-    glRotatef(angleY, 1.0, 0.0, 0.0);
-    glRotatef(angleX, 0.0, 1.0, 0.0);
-
-    drawWoodenBoard1();
-    drawWoodenBoard2();
-    drawChessboard1();
-    drawChessboard2();
-    drawBox();
-
-    glutSwapBuffers();
-}
-
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -254,17 +237,18 @@ void motion(int x, int y) {
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
     case 'a':
-        // Start the opening animation
+        // Memulai animasi membuka Box
         glutTimerFunc(0, openBox, 0);
         break;
     case 'd':
         if (board <= -0.5) {
-            // Start the closing animation only if the board is completely closed
+            // Memulai animasi menutup Box
             glutTimerFunc(0, closeBox, 0);
         }
         break;
 
     case 'o':
+        // Membuka Chess Board
         if (box >= 5.0) {
             board = 3.5;
             chessy = 0.6;
@@ -273,12 +257,40 @@ void keyboard(unsigned char key, int x, int y) {
         }
         break;
     case 'c':
+        // Menutup Chess Board
         board = -0.5;
         chessy = 0;
         chessz = 0;
         glutPostRedisplay();
         break;
     }
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    gluLookAt(5.0, 5.0, 15.0,
+        0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0);
+
+    printf("Tombol kontrol:\n");
+    printf("A = Membuka Box\n");
+    printf("D = Menutup Box (Hanya bisa ditutup jika papan catur telah tertutup 'C')\n");
+    printf("O = Membuka Papan Catur(Hanya bisa dibuka jika box telah terbuka 'A')\n");
+    printf("C = Menutup Papan Catur\n");
+
+    // mengaplikasikan rotasi mouse
+    glRotatef(angleY, 1.0, 0.0, 0.0);
+    glRotatef(angleX, 0.0, 1.0, 0.0);
+
+    drawWoodenBoard1();
+    drawWoodenBoard2();
+    drawChessboard1();
+    drawChessboard2();
+    drawBox();
+
+    glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {
